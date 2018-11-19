@@ -62,15 +62,18 @@ class Popular extends React.Component {
 		this.updateLanguage(this.state.selectedLanguage)
 	}
 
-	updateLanguage = (language) => {
+	updateLanguage = async (language) => {
 		this.setState(() => ({
 				selectedLanguage: language,
 				repos: null
 		}))
 
-		//AJAX
-		fetchPopularRepos(language)
-			.then((repos) => this.setState(() => ({ repos })))
+		try {
+			const repos = await fetchPopularRepos(language)
+			this.setState(() => ({ repos }))
+		} catch (error) {
+			console.warn(error)
+		}
 	}
 	render() {
 		const { selectedLanguage, repos } = this.state
